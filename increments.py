@@ -227,7 +227,7 @@ def parallaxtab():
 	\end{tabular}
 	"""
 	return tab
-	
+
 def venparallax():
 	Hdeg=10 
 	
@@ -254,40 +254,6 @@ def venparallax():
 	\end{tabular}
 	"""
 	return tab
-
-def moonsdaugment(hp, deg, min):
-	#returns moon SD augmentation in min due to topocentric vs geocentric difference
-	#using Stark approx. formula
-	k = 0.2725 #ratio radius moon/earth - by definition SD = k * hp
-	aug = ((k * hp / (1 - sin(rad(0, hp)) * sin(rad(deg, min)))) - k * hp)
-	return aug
-
-
-def moonsdaugmenttab():
-	hp = 54.0
-
-	tab = r'''\noindent 
-	\begin{tabular}[t]{|c|ccccccccc|}
-	\multicolumn{10}{c}{\textbf{Moon SD augmentation}}\\
-	'''
-	tab += r"""\hline 
-	HP $H_{a}$ & \textbf{10$^\circ$} & \textbf{20$^\circ$} & \textbf{30$^\circ$} & \textbf{40$^\circ$} & \textbf{50$^\circ$} & \textbf{60$^\circ$} & \textbf{70$^\circ$} & \textbf{80$^\circ$} & \textbf{90$^\circ$} \\
-	\hline
-	"""
-	while hp <= 61.5:
-		Hdeg = 10
-		line = r"\textbf{{ {}}} ".format(hp)
-		while Hdeg <= 90:
-			line += "& {:.1f} ".format(moonsdaugment(hp, Hdeg, 0))
-			Hdeg += 10
-		line += "\\\ \n"
-		tab += line
-		hp += 1.5
-	tab = tab + r"""\hline
-	\end{tabular}
-	"""
-	return tab
-
 
 def makelatex():
 	lx = r"""\documentclass[ 10pt, twoside, a4paper]{scrreprt}
@@ -321,7 +287,6 @@ def makelatex():
 	\begin{multicols}{2} \begin{scriptsize}
 	'''
 	lx = lx + venparallax()
-	lx = lx + moonsdaugmenttab()
 	lx = lx + r'''\end{scriptsize} \newpage
 	\small\section*{About these tables}
 	The preceding static tables are independent from the year. They differ from the tables found in the official paper versions of the Nautical almanac in two important considerations. 
@@ -344,9 +309,6 @@ For other than standard conditions, calculate a correction factor for $R_0$ by: 
 For moon sight (and if necessary for the Sun, Mars and Venus) a parallax correction is necessary. For the Sun, Mars and Venus the horizontal parallax ($HP$) is never more than 0.6' and can be omitted if this kind of precision is not necessary. The parallax ($P$) can be calculated from horizontal parallax ($HP$) and apparent altitude $H_a$ with the following formula:
 \[P={HP} \times \cos(H_a)\]
 The table for the moon gives the parallax for a horizontal parallax of 54' which is the lowest value for the moon. For all other values, the value in the lower half of the table has to be added. Note that this table is only for parallax and does not correct for refraction and semidiameter. For all moon and sun sights, semidiameter has to be added for lower limb sights and subtracted for upper limb sights. The value for HP and semidiameter is tabulated in the daily pages. The smaller parallax table is for parallax of the Sun, Venus and Mars.
-\subsubsection*{Moon SD augmentation}
-Due to its proximity, moon topo- and geocentric SD differ. The Moon SD augmentation table provides a correction to be added to the moon SD before calculating $H_o$. This correction was calculated using Stark approximate formula:
-\[SD_{aug}=SD \div (1 - \sin(HP) \cdot \sin(H_a))\]
 \subsubsection*{Altitude correction}
 To correct your sextant altitude $H_s$ do the following:
 Calculate $H_a$ by
